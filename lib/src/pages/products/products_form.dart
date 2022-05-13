@@ -1,3 +1,4 @@
+import 'package:agro_market/service/categories_services.dart';
 import 'package:agro_market/service/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,10 +10,34 @@ class ProductsForm extends StatefulWidget {
   State<ProductsForm> createState() => _ProductsFormState();
 }
 
-String nombre = "", descripcion =  "" ,precio = "", cantidad = "";
+String nombre = "", descripcion = "", precio = "", cantidad = "";
 final productsService = productService();
+String? categoriaSelected;
+var listCategoriesName = [""];
+List listCategoriesTotal = [];
+final categorieService = categoriesService();
+int idCategoria = 0;
+String _vistaCategorias = "CATEGORIAS";
 
 class _ProductsFormState extends State<ProductsForm> {
+  final formKey22 = GlobalKey<FormState>();
+  @override
+  void initState() {
+    getCategories();
+    super.initState();
+  }
+
+  void getCategories() async {
+    listCategoriesName = [];
+    dynamic listCategories = await categorieService.mostrar();
+    listCategoriesTotal = listCategories;
+    for (var i = 0; i < listCategories.length; i++) {
+      listCategoriesName.add(listCategories[i]["nombre"].toString());
+    }
+
+    setState(() {});
+  }
+
   final textFormFieldStyle = OutlineInputBorder(
     borderSide:
         const BorderSide(color: Color.fromARGB(255, 197, 254, 37), width: 2.0),
@@ -119,17 +144,22 @@ class _ProductsFormState extends State<ProductsForm> {
       alignment: Alignment.topCenter,
       margin: const EdgeInsets.all(10.0),
       child: Form(
+        key: formKey22,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Column(
             children: [
               nombreInput(context, textFormFieldStyle, textFormFieldStyleWrong),
               spaceBetween,
-              descripcionInput(context, textFormFieldStyle, textFormFieldStyleWrong),
+              descripcionInput(
+                  context, textFormFieldStyle, textFormFieldStyleWrong),
               spaceBetween,
               precioInput(context, textFormFieldStyle, textFormFieldStyleWrong),
               spaceBetween,
               cantidadInput(
+                  context, textFormFieldStyle, textFormFieldStyleWrong),
+              spaceBetween,
+              categoriesInput(
                   context, textFormFieldStyle, textFormFieldStyleWrong),
               spaceBetween,
             ],
@@ -150,8 +180,12 @@ class _ProductsFormState extends State<ProductsForm> {
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 0, 0))),
           onPressed: () {
-            _registrar();
-            Navigator.pushReplacementNamed(context, '/menuProducts');
+            if (formKey22.currentState!.validate()) {
+              _registrar();
+              Navigator.pushReplacementNamed(context, '/menuProducts');
+            } else {
+              print("no valido");
+            }
           },
         ),
         spaceBetweenWidth,
@@ -186,7 +220,7 @@ class _ProductsFormState extends State<ProductsForm> {
           focusedErrorBorder: textFormFieldStyleWrong,
           label: const Text(
             "Nombre del producto",
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black),
           ),
           labelStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
           suffixIcon: const Icon(
@@ -205,6 +239,52 @@ class _ProductsFormState extends State<ProductsForm> {
           return null;
         }
       },
+    );
+  }
+
+  Widget categoriesInput(context, textFormFieldStyle, textFormFieldStyleWrong) {
+    return DropdownButtonFormField(
+      menuMaxHeight: 200,
+      dropdownColor: Colors.white,
+      style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+      decoration: InputDecoration(
+        enabledBorder: textFormFieldStyle,
+        disabledBorder: textFormFieldStyle,
+        focusedBorder: textFormFieldStyle,
+        errorBorder: textFormFieldStyleWrong,
+        focusedErrorBorder: textFormFieldStyleWrong,
+        label: const Text(
+          "CATEGORIAS",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      icon: const Icon(
+        FontAwesomeIcons.arrowDown,
+        color: Color.fromARGB(255, 197, 254, 37),
+      ),
+      items: listCategoriesName.map((String value) {
+        return DropdownMenuItem(
+          value: value,
+          child: Text(
+            value,
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        // for (var i = 0; i < listCategoriesTotal.length; i++) {
+        //   if (listCategoriesTotal[i]["departamento"] == value) {
+        //     idCategoria =
+        //         listCategoriesTotal[i]["id_departamento"].toString();
+        //   }
+        // }
+
+        setState(() {});
+      },
+      hint: Text(
+        _vistaCategorias,
+        style: const TextStyle(color: Colors.black),
+      ),
+      validator: (value) => value == null ? "El campo es Obligatorio*" : null,
     );
   }
 
@@ -242,7 +322,8 @@ class _ProductsFormState extends State<ProductsForm> {
     );
   }
 
-  Widget descripcionInput(context, textFormFieldStyle, textFormFieldStyleWrong) {
+  Widget descripcionInput(
+      context, textFormFieldStyle, textFormFieldStyleWrong) {
     return TextFormField(
       maxLength: 40,
       style: const TextStyle(color: Colors.black),
@@ -253,7 +334,7 @@ class _ProductsFormState extends State<ProductsForm> {
           errorBorder: textFormFieldStyleWrong,
           focusedErrorBorder: textFormFieldStyleWrong,
           label: const Text(
-            "Descripcion de la categoria",
+            "Descripcion del producto",
             style: const TextStyle(color: Colors.black),
           ),
           labelStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
@@ -266,16 +347,8 @@ class _ProductsFormState extends State<ProductsForm> {
           descripcion = value;
         });
       },
-      validator: (valor) {
-        if (valor == '') {
-          return 'El campo es obligatorio *';
-        } else {
-          return null;
-        }
-      },
     );
   }
-
 
   Widget cantidadInput(context, textFormFieldStyle, textFormFieldStyleWrong) {
     return TextFormField(
@@ -321,7 +394,7 @@ class _ProductsFormState extends State<ProductsForm> {
     return ElevatedButton(
       style: style,
       onPressed: () {
-         Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacementNamed(context, '/menuProducts');
       },
       child: const Icon(
         Icons.arrow_back,

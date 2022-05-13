@@ -17,6 +17,7 @@ class GroceryProductDetails extends StatefulWidget {
 
 List toppingsAdicionados = [];
 List toppingsCarrito = [];
+String idProducto = "";
 
 class _GroceryProductDetailsState extends State<GroceryProductDetails> {
   String heroTag = '';
@@ -39,6 +40,7 @@ class _GroceryProductDetailsState extends State<GroceryProductDetails> {
     final bloc = GroceryProvider.of(context)?.bloc ?? GroceryStoreBloc();
 
     var size = MediaQuery.of(context).size;
+    idProducto = widget.product['id'];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -92,14 +94,17 @@ class _GroceryProductDetailsState extends State<GroceryProductDetails> {
             padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
-                const Expanded(
-                  flex: 2,
+                Expanded(
                   child: IconButton(
-                    onPressed: null,
-                    icon: Icon(
-                      Icons.favorite_border,
-                      color: Colors.red,
-                    ),
+                    icon: const Icon(Icons.delete),
+                    color: const Color.fromARGB(255, 145, 138, 138),
+                    onPressed: () {
+                      setState(() {
+                        eliminarProducto();
+                        Navigator.of(context).pop();
+                        // bloc.deleteProduct(item);
+                      });
+                    },
                   ),
                 ),
                 Expanded(
@@ -143,6 +148,12 @@ class _GroceryProductDetailsState extends State<GroceryProductDetails> {
           ),
         ],
       ),
+    );
+  }
+
+  void eliminarProducto() async {
+    dynamic respuesta = await productsService.eliminar(
+      idProducto,
     );
   }
 }

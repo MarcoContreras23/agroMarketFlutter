@@ -106,8 +106,7 @@ class _GroceryStoreHomeState extends State<GroceryStoreHome> {
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           image: DecorationImage(
-                            image:
-                                AssetImage("assets/FondoShop.png"),
+                            image: AssetImage("assets/FondoShop.png"),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -142,7 +141,19 @@ class _GroceryStoreHomeState extends State<GroceryStoreHome> {
                                                     children: List.generate(
                                                         bloc.cart.length,
                                                         (index) {
-                                                     
+                                                      Image image = Image.asset(
+                                                          'assets/products.jpg',
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height *
+                                                              0.15,
+                                                          fit: BoxFit.cover);
                                                       return Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -151,7 +162,7 @@ class _GroceryStoreHomeState extends State<GroceryStoreHome> {
                                                                     8.0),
                                                         child: Stack(
                                                           children: [
-                                                            const Hero(
+                                                            Hero(
                                                               tag:
                                                                   'list_details',
                                                               child:
@@ -159,6 +170,8 @@ class _GroceryStoreHomeState extends State<GroceryStoreHome> {
                                                                 backgroundColor:
                                                                     Colors
                                                                         .white,
+                                                                backgroundImage:
+                                                                    image.image,
                                                               ),
                                                             ),
                                                             Positioned(

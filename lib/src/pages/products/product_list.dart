@@ -361,76 +361,31 @@ class _GroceryProductsListState extends State<GroceryProductsList> {
                                       ),
                                     ),
                                   ),
-                                  Wrap(
-                                    alignment: WrapAlignment.start,
-                                    children: [
-                                      const Icon(
-                                        Icons.star,
-                                        color:
-                                            Color.fromARGB(255, 197, 254, 37),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: const Text(
-                                          "4.5",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Color.fromARGB(
-                                                255, 134, 134, 134),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                      ),
-                                      const Icon(
-                                        Icons.directions_walk,
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 14),
+                                    height: 55,
+                                    width: 300,
+                                    child: Text(
+                                      snapshot.data[index]["descripcion"],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: const Text(
-                                          "1.5 km",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Color.fromARGB(
-                                                255, 134, 134, 134),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.1,
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                  Wrap(
-                                    alignment: WrapAlignment.start,
-                                    children: [
-                                      const Icon(
-                                        Icons.star,
-                                        color:
-                                            Color.fromARGB(255, 197, 254, 37),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 14),
+                                    height: 55,
+                                    width: 300,
+                                    child: Text(
+                                      snapshot.data[index]["precio"],
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 5, right: 15),
-                                        child: const Text(
-                                          "\$5000 de descuento",
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color:
-                                                Color.fromARGB(255, 65, 65, 65),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.050,
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),

@@ -13,6 +13,7 @@ String nombre = "", descripcion = "";
 final categorieService = categoriesService();
 
 class _CategoriesFormState extends State<CategoriesForm> {
+  final formKey22 = GlobalKey<FormState>();
   final textFormFieldStyle = OutlineInputBorder(
     borderSide:
         const BorderSide(color: Color.fromARGB(255, 197, 254, 37), width: 2.0),
@@ -118,13 +119,15 @@ class _CategoriesFormState extends State<CategoriesForm> {
       alignment: Alignment.topCenter,
       margin: const EdgeInsets.all(10.0),
       child: Form(
+        key: formKey22,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Column(
             children: [
               nombreInput(context, textFormFieldStyle, textFormFieldStyleWrong),
               spaceBetween,
-              descripcionInput(context, textFormFieldStyle, textFormFieldStyleWrong),
+              descripcionInput(
+                  context, textFormFieldStyle, textFormFieldStyleWrong),
               spaceBetween
             ],
           ),
@@ -144,8 +147,12 @@ class _CategoriesFormState extends State<CategoriesForm> {
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 0, 0))),
           onPressed: () {
-            _registrarCategoria();
-            Navigator.pushReplacementNamed(context, '/menuCategories');
+            if (formKey22.currentState!.validate()) {
+              _registrarCategoria();
+              Navigator.pushReplacementNamed(context, '/menuCategories');
+            } else {
+              print("no valido");
+            }
           },
         ),
         spaceBetweenWidth,
@@ -202,7 +209,8 @@ class _CategoriesFormState extends State<CategoriesForm> {
     );
   }
 
-  Widget descripcionInput(context, textFormFieldStyle, textFormFieldStyleWrong) {
+  Widget descripcionInput(
+      context, textFormFieldStyle, textFormFieldStyleWrong) {
     return TextFormField(
       maxLength: 40,
       style: const TextStyle(color: Colors.black),
@@ -226,16 +234,8 @@ class _CategoriesFormState extends State<CategoriesForm> {
           descripcion = value;
         });
       },
-      validator: (valor) {
-        if (valor == '') {
-          return 'El campo es obligatorio *';
-        } else {
-          return null;
-        }
-      },
     );
   }
-
 
   Widget _bottonBack() {
     final ButtonStyle style = ElevatedButton.styleFrom(
@@ -247,7 +247,7 @@ class _CategoriesFormState extends State<CategoriesForm> {
     return ElevatedButton(
       style: style,
       onPressed: () {
-         Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacementNamed(context, '/');
       },
       child: const Icon(
         Icons.arrow_back,
@@ -378,5 +378,4 @@ class _CategoriesFormState extends State<CategoriesForm> {
       );
     }
   }
-
 }
