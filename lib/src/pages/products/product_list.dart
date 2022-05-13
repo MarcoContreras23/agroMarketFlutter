@@ -5,7 +5,7 @@ import 'package:agro_market/service/product_service.dart';
 import 'package:agro_market/src/pages/products/product_detail.dart';
 import 'package:agro_market/src/pages/products/products_home.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class GroceryProductsList extends StatefulWidget {
   const GroceryProductsList({Key? key}) : super(key: key);
@@ -15,6 +15,7 @@ class GroceryProductsList extends StatefulWidget {
 }
 
 final productsService = productService();
+String nombreProduct = "";
 
 class _GroceryProductsListState extends State<GroceryProductsList> {
   @override
@@ -56,11 +57,6 @@ class _GroceryProductsListState extends State<GroceryProductsList> {
           height: size.height * 0.01,
         ),
         _bodyParteUno(),
-        _topText(size),
-        SizedBox(
-          height: size.height * 0.01,
-        ),
-        _ordenBy(size),
         Flexible(
           child: _listProduct(context),
         ),
@@ -80,6 +76,7 @@ class _GroceryProductsListState extends State<GroceryProductsList> {
               width: MediaQuery.of(context).size.width * 0.07,
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FloatingActionButton(
                   backgroundColor: const Color.fromARGB(255, 197, 254, 37),
@@ -191,6 +188,7 @@ class _GroceryProductsListState extends State<GroceryProductsList> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
+                _barSearch(),
               ],
             ),
             SizedBox(
@@ -289,6 +287,81 @@ class _GroceryProductsListState extends State<GroceryProductsList> {
           height: size.height * 0.01,
         ),
       ],
+    );
+  }
+
+  Widget _barSearch() {
+    return Container(
+      padding: const EdgeInsets.only(top: 20.0),
+      width: MediaQuery.of(context).size.height * 0.32,
+      height: MediaQuery.of(context).size.height * 0.1,
+      child: TypeAheadField<User?>(
+        minCharsForSuggestions: 2,
+        animationStart: 0.1,
+        hideSuggestionsOnKeyboardHide: true,
+        textFieldConfiguration: const TextFieldConfiguration(
+          style: TextStyle(color: Colors.black),
+          maxLength: 50,
+          decoration: InputDecoration(
+              hintText: "Buscar...",
+              hintStyle: TextStyle(
+                fontSize: 20,
+                color: Color.fromARGB(255, 148, 148, 148),
+              ),
+              suffixIcon: Icon(
+                Icons.search,
+                color: Color.fromARGB(255, 197, 254, 37),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                borderSide: BorderSide(
+                    color: Color.fromARGB(255, 148, 148, 148), width: 2.0),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                borderSide: BorderSide(
+                    color: Color.fromARGB(255, 148, 148, 148), width: 2.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                borderSide: BorderSide(
+                    color: Color.fromARGB(255, 148, 148, 148), width: 2.0),
+              )),
+        ),
+        suggestionsCallback: UserApi.getUserSuggestions,
+        itemBuilder: (context, User? suggestion) {
+          final user = suggestion!;
+          return Container(
+            color: Colors.white,
+            child: ListTile(
+                selectedTileColor: Colors.white,
+                textColor: Colors.black,
+                leading: const CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    'https://www.alqueria.com.co/sites/default/files/styles/1327_612/public/hamburguesa-con-amigos-y-salsa-de-champinones_0.jpg?h=2dfa7a18&itok=hLxehdIa',
+                  ),
+                ),
+                title: Text(
+                  user.name,
+                )),
+          );
+        },
+        noItemsFoundBuilder: (context) => Container(
+          color: Colors.white,
+          height: 40,
+          child: const Center(
+            child: Text(
+              'No se encontraron restaurantes',
+              style: TextStyle(fontSize: 24, color: Colors.black),
+            ),
+          ),
+        ),
+        onSuggestionSelected: (User? suggestion) {
+          final user = suggestion!;
+          print("user tiene esto ${user}");
+          nombreProduct = user.name;
+        },
+      ),
     );
   }
 

@@ -100,6 +100,8 @@ class _HomeState extends State<Home> {
               Navigator.pushReplacementNamed(context, '/menuCategories');
             },
           ),
+          spaceBetween,
+          spaceBetween,
         ],
       ),
     );

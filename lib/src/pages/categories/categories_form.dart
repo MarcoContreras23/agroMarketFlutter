@@ -1,6 +1,8 @@
 import 'package:agro_market/service/categories_services.dart';
+import 'package:agro_market/service/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CategoriesForm extends StatefulWidget {
   const CategoriesForm({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class CategoriesForm extends StatefulWidget {
 }
 
 String nombre = "", descripcion = "";
+String nombreCategorie = "";
 final categorieService = categoriesService();
 
 class _CategoriesFormState extends State<CategoriesForm> {
@@ -256,6 +259,8 @@ class _CategoriesFormState extends State<CategoriesForm> {
     );
   }
 
+
+
   void _registrarCategoria() async {
     dynamic respuesta = await categorieService.register(
       nombre,
@@ -285,7 +290,7 @@ class _CategoriesFormState extends State<CategoriesForm> {
               child: ListBody(
                 children: const [
                   Text(
-                    "Producto registrado con exito",
+                    "Categoria registrada con exito",
                     style: TextStyle(
                       shadows: <Shadow>[
                         Shadow(
